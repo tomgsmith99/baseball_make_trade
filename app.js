@@ -39,6 +39,11 @@ const season = 2021
 
 /*************************************************/
 
+app.get('/favicon.ico', (req, res) => {
+	res.sendStatus(200)
+	return
+})
+
 app.get('/', (req, res) => {
 
 	var obj = {}
