@@ -1,0 +1,374 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	 "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+<head>
+
+	<title>Diff Family Baseball: Make a Trade</title>
+
+	<meta http-equiv="content-type" content="text/html;charset=utf-8">
+
+	<!-- Bootstrap core CSS -->
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+
+	<!-- Material Design Bootstrap -->
+	<link href="https://baseball.tomgsmith.com/css/mdb.min.css" rel="stylesheet">
+
+	<link href="https://baseball.tomgsmith.com/css/navbar.css" rel="stylesheet">
+
+	<link href="https://baseball.tomgsmith.com/css/hey_man_cool.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+	<a id="top"></a>
+
+	<nav class="navbar navbar-expand-md">
+
+		<a class="navbar-brand" href="/">Home</a>
+
+		<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+			<ul class="navbar-nav mr-auto">
+
+				<li class="nav-item">
+					<a class="nav-link" href="/about">About</a>
+				</li>
+
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="dropdown_history" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">History</a>
+
+					<div class="dropdown-menu" aria-labelledby="dropdown01">
+						<a class="dropdown-item" href="/about/0.html">1993-1997</a>
+						<a class="dropdown-item" href="/about/1.html">1998-2001</a>
+						<a class="dropdown-item" href="/about/2.html">2002-2005</a>
+						<a class="dropdown-item" href="/about/3.html">2006</a>
+						<a class="dropdown-item" href="/about/4.html">2007-2009</a>
+						<a class="dropdown-item" href="/about/5.html">2010-2012</a>
+						<a class="dropdown-item" href="/about/6.html">2013-2019</a>
+						<a class="dropdown-item" href="/about/7.html">2020</a>
+					</div>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="/finishes">Finishes</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="/records">Records</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="/owners">Owners</a>
+				</li>
+
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="dropdown_seasons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Seasons</a>
+					<div class="dropdown-menu" aria-labelledby="dropdown01">
+						<a class="dropdown-item" href="/seasons/2020">2020</a>
+						<a class="dropdown-item" href="/seasons/2019">2019</a>
+						<a class="dropdown-item" href="/seasons/2018">2018</a>
+						<a class="dropdown-item" href="/seasons/2017">2017</a>
+						<a class="dropdown-item" href="/seasons/2016">2016</a>
+						<a class="dropdown-item" href="/seasons/2015">2015</a>
+						<a class="dropdown-item" href="/seasons/2014">2014</a>
+						<a class="dropdown-item" href="/seasons/2013">2013</a>
+						<a class="dropdown-item" href="/seasons/2012">2012</a>
+						<a class="dropdown-item" href="/seasons/2011">2011</a>
+						<a class="dropdown-item" href="/seasons">1993-2010</a>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+	<main role="main" class="container">
+
+		<div class="starter-template" style="margin-top:10px">
+			<div class="row">
+				<div class="col-sm" style = "text-align: left">
+
+					{{^authenticated}}
+					<div id = "authenticate_div">
+
+						<p>Please log in.</p>
+
+						<p>The password is the first initial of Grandma and Grandpa Diff's children, oldest to youngest. For example, if the children were Bengie, Jose, and Yadier, then the password would be:</p>
+
+						<p>BJY</p>
+
+						<input type="password" id="password" size=10>
+
+						<br>
+
+						<button id="evaluate_password" onclick="authenticate()">go</button>
+					</div>
+					{{/authenticated}}
+
+					{{#authenticated}}
+					<div id = "owner_id_div">
+						<p>choose an owner:</p>
+						<select id="owner_id" name="owner_id" size=10>
+							{{#owners}}
+								<option value="{{owner_id}}">{{lnf}}</option>
+							{{/owners}}
+						</select>
+
+						<br>
+
+						<button id="select_owner" onclick="select_owner()">go</button>
+					</div>
+
+					<div id = "player_to_drop_div" style = "display: none">
+
+						<p>player to drop:</p>
+
+						<div id = "player_to_drop"></div>
+
+						<button id="choose_player_to_drop" onclick="evaluate_dropped_player()">go</button>
+					</div>
+
+					<div id = "player_to_add_div" style = "display: none">
+
+						<p>player to add:</p>
+
+						<select id='player_to_add' size=10></select>
+
+						<button id="choose_player_to_add" onclick="evaluate_added_player()">go</button>
+					</div>
+					{{/authenticated}}
+				</div>
+
+				<div class="col-sm">
+
+					<button id = "restart" onclick="start_over()">start over</button>
+					{{#authenticated}}
+					<br>
+					<button id = "clear_session" onclick="clear_session()">clear session</button>
+					{{/authenticated}}
+				</div>
+			</div>
+		</div>
+
+	</main>
+
+	<!-- SCRIPTS -->
+	<!-- JQuery -->
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+
+	<!-- Google Analytics -->
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-26481206-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+<script type="text/javascript">
+
+const max_salary = 13000
+
+const season = 2021
+
+function authenticate() {
+
+	const password = $("#password").val()
+
+	console.log("the password is: " + password)
+
+	const password_obj = {
+		password: password
+	}
+
+	var settings = {
+		"async": true,
+		"crossDomain": true,
+		"url": `/authenticate`,
+		"method": "POST",
+		"headers": {
+			"Content-Type": "application/json",
+			"cache-control": "no-cache",
+		},
+		"processData": false,
+		"data": JSON.stringify(password_obj)
+	}
+
+	$.ajax(settings).done(function (resp) {
+
+		console.log("the response from the server was: ")
+
+		console.dir(resp)
+
+		if (resp.status == "ok") {
+			location.reload()
+		}
+		else {
+			alert("password incorrect")
+		}
+	})
+}
+
+function clear_session() {
+	sessionStorage.clear()
+
+	$.getJSON(`/session/clear`, function(data) {
+		console.dir(data)
+
+		location.reload()
+	})
+}
+
+function evaluate_added_player() {
+	const added_player_id = $("#player_to_add").val()
+
+	console.log(added_player_id)
+
+	const trade_obj = {
+		owner_id: sessionStorage.getItem("owner_id"),
+		dropped_player_id: sessionStorage.getItem("dropped_player_id"),
+		added_player_id: added_player_id
+	}
+
+	var settings = {
+		"async": true,
+		"crossDomain": true,
+		"url": `/api/trades`,
+		"method": "POST",
+		"headers": {
+			"Content-Type": "application/json",
+			"cache-control": "no-cache",
+		},
+		"processData": false,
+		"data": JSON.stringify(trade_obj)
+	}
+
+	$.ajax(settings).done(function (resp) {
+
+		console.log("the response from the server was: ")
+
+		console.dir(resp)
+
+		// if (resp.status == "ok") {
+		// 	location.reload()
+		// }
+	})
+}
+
+function evaluate_dropped_player() {
+
+	const dropped_player_id = $('input[name="player_to_drop"]:checked').val()
+
+	sessionStorage.setItem("dropped_player_id", dropped_player_id)
+
+	console.log("the dropped player is: " + dropped_player_id)
+
+	$.getJSON(`/api/players/${dropped_player_id}/current`, function(data) {
+
+		console.dir(data)
+
+		const budget_for_new_player = parseInt(data.salary) + parseInt(sessionStorage.getItem("bank"))
+
+		html = `<p>player to drop: ${data.fnf}</p>`
+		html += `<p>salary: $${data.salary}</p>`
+		html += `<p>budget for new player: $${budget_for_new_player}</p>`
+
+		html += `<hr>`
+
+		$("#player_to_drop_div").html(html)
+
+		owner_id = sessionStorage.getItem("owner_id")
+
+		$.getJSON(`/api/seasons/current/players?max_salary=${budget_for_new_player}&pos=${data.pos}&owner_id=${owner_id}`, function(data) {
+
+			console.dir(data)
+
+			for (player of data) {
+				player_to_add += `<option value=${player.player_id}> ${player.lnf} - ${player.team} - $${player.salary} - ${player.points}pts</option>`
+			}
+
+			$("#player_to_add").html(player_to_add)
+			$("#player_to_add_div").show()
+		})
+	})
+}
+
+function select_owner() {
+
+	const owner_id = $("#owner_id").val()
+
+	sessionStorage.setItem("owner_id", owner_id)
+
+	$.getJSON(`/api/owners/${owner_id}/current`, function(data) {
+
+		console.dir(data)
+
+		sessionStorage.setItem("bank", data.bank)
+
+		html = `<p>owner: ${data.fnf}</p>`
+		html += `<p>bank: $${data.bank}</p>`
+		html += `<hr>`
+
+		$("#owner_id_div").html(html)
+		$("#player_to_drop_div").show()
+	})
+
+	$.getJSON(`/api/owners/${owner_id}/team`, function(data) {
+
+		console.dir(data)
+
+		$("#player_to_drop").show()
+
+		player_to_drop = ""
+
+		for (player of data) {
+			console.log(player)
+
+			player_to_drop += `<input type="radio" name="player_to_drop" value="${player.player_id}"> ${player.pos} - ${player.lnf} - ${player.team} - $${player.salary}<br>`
+		}
+
+		$("#player_to_drop").html(player_to_drop)
+	})
+}
+
+function start_over() {
+	sessionStorage.clear()
+	location.reload()
+}
+
+window.onload = function() {
+
+	$.getJSON(`/authenticated`, function(data) {
+
+		console.dir(data)
+
+		if (data.authenticated) {
+			console.log("authenticated")
+		}
+		else {
+			console.log("not authenticated")
+		}
+	})
+}
+
+</script>
+
+	</body>
+</html>
