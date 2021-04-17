@@ -7,19 +7,15 @@ let mustacheExpress = require('mustache-express')
 
 var dbconn = require('./dbconn.js')
 
-var con = dbconn.mysql_conn()
-
 /*************************************************/
 
 const app = express()
 
-app.use(express.json());
+app.use(express.json())
 
-app.engine('html', mustacheExpress());
+app.engine('html', mustacheExpress())
 
-app.set('view engine', 'html');
-
-app.set('views', `${__dirname}/views`);
+app.set('view engine', 'html')
 
 app.use(session({
 	secret: process.env.session_secret,
@@ -32,7 +28,7 @@ app.use(session({
 const port = process.env.PORT || 3000
 
 app.listen(port, () => {
-	console.log(`Example app listening at http://localhost:${port}`)
+	console.log(`app listening at http://localhost:${port}`)
 })
 
 const season = 2021
@@ -46,7 +42,9 @@ app.get('/favicon.ico', (req, res) => {
 
 app.get('/', (req, res) => {
 
-	var obj = {}
+	var obj = {
+		api_base: process.env.API_BASE
+	}
 
 	// check for valid session
 
@@ -57,7 +55,7 @@ app.get('/', (req, res) => {
 	else {
 		obj.authenticated = false
 		console.log("the user is not authenticated")
-		res.render ('base', obj)
+		res.render ('index', obj)
 		return
 	}
 
@@ -65,7 +63,9 @@ app.get('/', (req, res) => {
 
 	console.log(query)
 
-	con.query(query, function (err, owners) {
+	var connection = dbconn.mysql_conn()
+
+	connection.query(query, function (err, owners) {
 
 		if (err) {
 			console.log(err)
@@ -75,7 +75,11 @@ app.get('/', (req, res) => {
 
 		obj.owners = owners
 
-		res.render ('base', obj);
+		res.render ('index', obj)
+
+		connection.end(function(err) {
+			console.log("terminated mysql connection.")
+		})
 	})
 })
 
@@ -88,105 +92,6 @@ app.get('/authenticated', (req, res) => {
 	}
 })
 
-app.get('/api/players/:player_id/current', (req, res) => {
-
-	var player_id = req.params.player_id
-	console.log(player_id)
-
-	const query = `SELECT * FROM players_current_view WHERE player_id=${player_id}`
-
-	con.query(query, function (err, data) {
-		if (err) {
-			console.log(err)
-			res.json(err)
-			return
-		}
-
-		console.log(data)
-
-		res.json(data[0])
-	})
-})
-
-app.get('/api/owners/:owner_id', (req, res) => {
-
-	const owner_id = req.params.owner_id
-
-	let query = `SELECT * FROM owners`
-	query += ` WHERE owner_id=${owner_id}`
-
-	console.log(query)
-
-	con.query(query, function (err, data) {
-		if (err) {
-			console.log(err)
-			res.json(err)
-			return
-		}
-		res.json(data[0])
-	})
-})
-
-app.get('/api/owners/:owner_id/current', (req, res) => {
-
-	const owner_id = req.params.owner_id
-
-	let query = `SELECT * FROM ownersXseasons_current_view`
-	query += ` WHERE owner_id=${owner_id}`
-
-	console.log(query)
-
-	con.query(query, function (err, data) {
-		if (err) {
-			console.log(err)
-			res.json(err)
-			return
-		}
-		res.json(data[0])
-	})
-})
-
-app.get('/api/owners/:owner_id/team', (req, res) => {
-
-	const owner_id = req.params.owner_id
-
-	let query = `SELECT * FROM ownersXrosters_current_view AS osx, position_order AS p`
-	query += ` WHERE osx.owner_id=${owner_id} AND osx.pos = p.pos ORDER BY p.o ASC`
-	query += `, osx.lnf ASC`
-
-	console.log(query)
-
-	con.query(query, function (err, data) {
-		if (err) {
-			console.log(err)
-			res.json(err)
-			return
-		}
-		res.json(data)
-	})
-})
-
-app.get('/api/seasons/current/players?*', (req, res) => {
-
-	const max_salary = req.query.max_salary
-	const owner_id = req.query.owner_id
-	const pos = req.query.pos
-
-	let query = `SELECT * FROM players_current_view WHERE salary <= ${max_salary}`
-	query += ` AND pos = '${pos}' AND player_id NOT IN (SELECT player_id FROM ownersXrosters_current_view WHERE owner_id = ${owner_id}) ORDER BY salary DESC`
-
-	console.log(query)
-
-	con.query(query, function (err, data) {
-		if (err) {
-			console.log(err)
-			res.json(err)
-			return
-		}
-		res.json(data)
-	})
-})
-
 app.get('/session/clear', (req, res) => {
 
 	delete req.session.authenticated
@@ -197,7 +102,7 @@ app.get('/session/clear', (req, res) => {
 /*************************************************/
 /* POST */
 
-app.post('/api/trades', (req, res) => {
+app.post('/trade', (req, res) => {
 
 	if (!("authenticated" in req.session && req.session.authenticated)) {
 		res.sendStatus(403)
@@ -214,7 +119,9 @@ app.post('/api/trades', (req, res) => {
 
 	console.log(query)
 
-	con.query(query, function (err, data) {
+	var connection = dbconn.mysql_conn()
+
+	connection.query(query, function (err, data) {
 		if (err) {
 			console.log(err)
 			res.json(err)
@@ -228,7 +135,7 @@ app.post('/api/trades', (req, res) => {
 
 		query = `SELECT salary FROM players_current WHERE player_id = ${dropped_player_id}`
 
-		con.query(query, function (err, data) {
+		connection.query(query, function (err, data) {
 			if (err) {
 				console.log(err)
 				res.json(err)
@@ -241,11 +148,11 @@ app.post('/api/trades', (req, res) => {
 
 			let d = dayOfYear(new Date())
 
-			query = `INSERT INTO ownersXrosters_current SET owner_id = ${owner_id}, player_id = ${added_player_id}, start_date = ${d}, acquired = 1, prev_points = ${added_player_points}`
+			query = `INSERT INTO ownersXrosters_current SET owner_id = ${owner_id}, player_id = ${added_player_id}, start_date = ${d}, acquired = 1, prev_points = ${added_player_points}, season=${season}`
 
 			console.log(query)
 
-			con.query(query, function (err, data) {
+			connection.query(query, function (err, data) {
 				if (err) {
 					console.log(err)
 					res.json(err)
@@ -256,7 +163,7 @@ app.post('/api/trades', (req, res) => {
 
 				console.log(query)
 
-				con.query(query, function (err, data) {
+				connection.query(query, function (err, data) {
 					if (err) {
 						console.log(err)
 						res.json(err)
@@ -271,18 +178,25 @@ app.post('/api/trades', (req, res) => {
 
 						console.log(query)
 
-						con.query(query, function (err, data) {
+						connection.query(query, function (err, data) {
 							if (err) {
 								console.log(err)
 								res.json(err)
 								return
 							}
+							res.sendStatus(200)
 
-							res.json({status: "ok"})
+							connection.end(function(err) {
+								console.log("terminated mysql connection.")
+							})
 						})
 					}
 					else {
-						res.json({status: "ok"})
+						res.sendStatus(200)
+
+						connection.end(function(err) {
+							console.log("terminated mysql connection.")
+						})
 					}
 				})
 			})
