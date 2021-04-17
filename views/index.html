@@ -333,21 +333,36 @@ function select_owner() {
 		$("#player_to_drop_div").show()
 	})
 
-	$.getJSON(`{{{api_base}}}/api/owners/${owner_id}/team`, function(data) {
+	$.getJSON(`{{{api_base}}}/api/owners/${owner_id}/current/trades/count`, function(data) {
 
 		console.dir(data)
 
-		$("#player_to_drop").show()
+		trades = data.trades
 
-		player_to_drop = ""
+		console.log(trades)
 
-		for (player of data) {
-			console.log(player)
-
-			player_to_drop += `<input type="radio" name="player_to_drop" value="${player.player_id}"> ${player.pos} - ${player.lnf} - ${player.team} - $${player.salary}<br>`
+		if (trades > 1) {
+			html = "Sorry, that owner has already used all their trades."
+			$("#ui").html(html)
 		}
+		else {
+			$.getJSON(`{{{api_base}}}/api/owners/${owner_id}/team/starters`, function(data) {
 
-		$("#player_to_drop").html(player_to_drop)
+				console.dir(data)
+
+				$("#player_to_drop").show()
+
+				player_to_drop = ""
+
+				for (player of data) {
+					console.log(player)
+
+					player_to_drop += `<input type="radio" name="player_to_drop" value="${player.player_id}"> ${player.pos} - ${player.lnf} - ${player.team} - $${player.salary}<br>`
+				}
+
+				$("#player_to_drop").html(player_to_drop)
+			})
+		}
 	})
 }
 
