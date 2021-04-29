@@ -170,11 +170,25 @@ app.post('/trade', (req, res) => {
 						return
 					}
 
+					// calculate salary difference
+					let diff = 0
+
 					if (added_player_salary > dropped_player_salary) {
+						diff = added_player_salary - dropped_player_salary
+					}
 
-						let d = added_player_salary - dropped_player_salary
+					query = `UPDATE ownersXseasons_current SET bank = (bank - ${diff}) WHERE owner_id = ${owner_id}`
 
-						query = `UPDATE ownersXseasons_current SET bank = (bank - ${d}) WHERE owner_id = ${owner_id}`
+					console.log(query)
+
+					connection.query(query, function (err, data) {
+						if (err) {
+							console.log(err)
+							res.json(err)
+							return
+						}
+
+						query = `INSERT INTO trades SET owner_id=${owner_id}, dropped_player_id=${dropped_player_id}, added_player_id=${added_player_id}, season=${season}, day=${d}`
 
 						console.log(query)
 
@@ -190,14 +204,7 @@ app.post('/trade', (req, res) => {
 								console.log("terminated mysql connection.")
 							})
 						})
-					}
-					else {
-						res.sendStatus(200)
-
-						connection.end(function(err) {
-							console.log("terminated mysql connection.")
-						})
-					}
+					})
 				})
 			})
 		})
