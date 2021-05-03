@@ -217,7 +217,7 @@ app.post('/authenticate', (req, res) => {
 
 	console.log("the password is: " + password)
 
-	if (password.toLowerCase() == process.env.group_password.toLowerCase()) {
+	if (password.toLowerCase() == process.env.group_password.toLowerCase() || password.toLowerCase() == process.env.group_password_alt.toLowerCase()) {
 		req.session.authenticated = true
 
 		res.json({"status": "ok"})
