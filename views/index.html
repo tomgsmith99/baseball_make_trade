@@ -1,4 +1,3 @@
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	 "http://www.w3.org/TR/html4/loose.dtd">
 
@@ -6,181 +5,53 @@
 
 <head>
 
-	<title>Diff Family Baseball: Make a Trade</title>
+	<title>Baseball: Make a Trade</title>
 
 	<meta http-equiv="content-type" content="text/html;charset=utf-8">
 
 	<!-- Bootstrap core CSS -->
 
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
 
-	<!-- Material Design Bootstrap -->
-	<link href="https://baseball.tomgsmith.com/css/mdb.min.css" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link
+	  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+	  rel="stylesheet"
+	/>
+	<!-- Google Fonts -->
+	<link
+	  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+	  rel="stylesheet"
+	/>
+	<!-- MDB -->
+	<link
+	  href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.css"
+	  rel="stylesheet"
+	/>
 
 	<link href="https://baseball.tomgsmith.com/css/navbar.css" rel="stylesheet">
 
 	<link href="https://baseball.tomgsmith.com/css/hey_man_cool.css" rel="stylesheet">
 
-</head>
+	<style>
+		a {
+			color: inherit; /* blue colors for links too */
+			text-decoration: inherit; /* no underline */
+		}
 
-<body>
+		#make_a_trade {
+			display: '{{make_a_trade}}';
+		}
+	</style>
 
-	<a id="top"></a>
-
-	<nav class="navbar navbar-expand-md">
-
-		<a class="navbar-brand" href="https://baseball.tomgsmith.com">Home</a>
-
-		<div class="collapse navbar-collapse" id="navbarsExampleDefault">
-			<ul class="navbar-nav mr-auto">
-
-				<li class="nav-item">
-					<a class="nav-link" href="https://baseball.tomgsmith.com/about">About</a>
-				</li>
-
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="dropdown_history" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">History</a>
-
-					<div class="dropdown-menu" aria-labelledby="dropdown01">
-						<a class="dropdown-item" href="https://baseball.tomgsmith.com/about/0.html">1993-1997</a>
-						<a class="dropdown-item" href="https://baseball.tomgsmith.com/about/1.html">1998-2001</a>
-						<a class="dropdown-item" href="https://baseball.tomgsmith.com/about/2.html">2002-2005</a>
-						<a class="dropdown-item" href="https://baseball.tomgsmith.com/about/3.html">2006</a>
-						<a class="dropdown-item" href="https://baseball.tomgsmith.com/about/4.html">2007-2009</a>
-						<a class="dropdown-item" href="https://baseball.tomgsmith.com/about/5.html">2010-2012</a>
-						<a class="dropdown-item" href="https://baseball.tomgsmith.com/about/6.html">2013-2019</a>
-						<a class="dropdown-item" href="https://baseball.tomgsmith.com/about/7.html">2020</a>
-					</div>
-				</li>
-
-				<li class="nav-item">
-					<a class="nav-link" href="https://baseball.tomgsmith.com/finishes">Finishes</a>
-				</li>
-
-				<li class="nav-item">
-					<a class="nav-link" href="https://baseball.tomgsmith.com/records">Records</a>
-				</li>
-
-				<li class="nav-item">
-					<a class="nav-link" href="https://baseball.tomgsmith.com/owners">Owners</a>
-				</li>
-
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="dropdown_seasons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Seasons</a>
-					<div class="dropdown-menu" aria-labelledby="dropdown01">
-						<a class="dropdown-item" href="https://baseball.tomgsmith.com/seasons/2020">2020</a>
-						<a class="dropdown-item" href="https://baseball.tomgsmith.com/seasons/2019">2019</a>
-						<a class="dropdown-item" href="https://baseball.tomgsmith.com/seasons/2018">2018</a>
-						<a class="dropdown-item" href="https://baseball.tomgsmith.com/seasons/2017">2017</a>
-						<a class="dropdown-item" href="https://baseball.tomgsmith.com/seasons/2016">2016</a>
-						<a class="dropdown-item" href="https://baseball.tomgsmith.com/seasons/2015">2015</a>
-						<a class="dropdown-item" href="https://baseball.tomgsmith.com/seasons/2014">2014</a>
-						<a class="dropdown-item" href="https://baseball.tomgsmith.com/seasons/2013">2013</a>
-						<a class="dropdown-item" href="https://baseball.tomgsmith.com/seasons/2012">2012</a>
-						<a class="dropdown-item" href="https://baseball.tomgsmith.com/seasons/2011">2011</a>
-						<a class="dropdown-item" href="https://baseball.tomgsmith.com/seasons">1993-2010</a>
-					</div>
-				</li>
-			</ul>
-		</div>
-	</nav>
-
-	<main role="main" class="container">
-
-		<div class="starter-template" style="margin-top:10px">
-			<div class="row">
-				<div class="col-sm" id="ui" style = "text-align: left">
-
-					{{^authenticated}}
-					<div id = "authenticate_div">
-
-						<p>Please log in.</p>
-
-						<p>The password is the first initial of Grandma and Grandpa Diff's children, oldest to youngest. For example, if the children were Bengie, Jose, and Yadier, then the password would be:</p>
-
-						<p>BJY</p>
-
-						<input type="password" id="password" size=10>
-
-						<br>
-
-						<button id="evaluate_password" onclick="authenticate()">go</button>
-					</div>
-					{{/authenticated}}
-
-					{{#authenticated}}
-					<div id = "owner_id_div">
-						<p>choose an owner:</p>
-						<select id="owner_id" name="owner_id" size=10>
-							{{#owners}}
-								<option value="{{owner_id}}">{{lnf}}</option>
-							{{/owners}}
-						</select>
-
-						<br>
-
-						<button id="select_owner" onclick="select_owner()">go</button>
-					</div>
-
-					<div id = "player_to_drop_div" style = "display: none">
-
-						<p>player to drop:</p>
-
-						<div id = "player_to_drop"></div>
-
-						<button id="choose_player_to_drop" onclick="evaluate_dropped_player()">go</button>
-					</div>
-
-					<div id = "player_to_add_div" style = "display: none">
-
-						<p>player to add:</p>
-
-						<select id='player_to_add' size=10></select>
-
-						<button id="choose_player_to_add" onclick="evaluate_added_player()">go</button>
-					</div>
-					{{/authenticated}}
-				</div>
-
-				<div class="col-sm">
-
-					<button id = "restart" onclick="start_over()">start over</button>
-					{{#authenticated}}
-					<br>
-					<button id = "clear_session" onclick="clear_session()">clear session</button>
-					{{/authenticated}}
-				</div>
-			</div>
-		</div>
-
-	</main>
-
-	<!-- SCRIPTS -->
-	<!-- JQuery -->
-
-<script
-  src="https://code.jquery.com/jquery-3.4.1.min.js"
-  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-  crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
 
-	<!-- Google Analytics -->
-	<script type="text/javascript">
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-26481206-1']);
-		_gaq.push(['_trackPageview']);
-
-		(function() {
-			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
-	</script>
 
 <script type="text/javascript">
 
@@ -387,6 +258,159 @@ window.onload = function() {
 }
 
 </script>
+
+</head>
+
+<body>
+
+	<a id="top"></a>
+
+	<nav class="navbar navbar-expand-md">
+
+		<a class="navbar-brand" href="/">Home</a>
+
+		<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+			<ul class="navbar-nav mr-auto">
+
+				<li class="nav-item">
+					<a class="nav-link" href="/history">History</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="/finishes">Finishes</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="/records">Records</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="/owners">Owners</a>
+				</li>
+
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="dropdown_seasons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Seasons</a>
+					<div class="dropdown-menu" aria-labelledby="dropdown01">
+						<a class="dropdown-item" href="/seasons/2021">2021</a>
+						<a class="dropdown-item" href="/seasons/2020">2020</a>
+						<a class="dropdown-item" href="/seasons/2019">2019</a>
+						<a class="dropdown-item" href="/seasons/2018">2018</a>
+						<a class="dropdown-item" href="/seasons/2017">2017</a>
+						<a class="dropdown-item" href="/seasons/2016">2016</a>
+						<a class="dropdown-item" href="/seasons/2015">2015</a>
+						<a class="dropdown-item" href="/seasons">all seasons</a>
+					</div>
+				</li>
+
+				<li class="nav-item" id = "make_a_trade">
+					<a class="nav-link" href="https://tomgsmith99-baseball-trade.herokuapp.com">Make a trade</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+	<main role="main" class="container">
+
+		<div class="starter-template" style="margin-top:10px">
+
+			<div class="row">
+				<div class="col-sm" id="ui" style = "text-align: left">
+
+					{{^authenticated}}
+					<div id = "authenticate_div">
+
+						<p>Please log in.</p>
+
+						<p>The password is the first initial of Grandma and Grandpa Diff's children, oldest to youngest. For example, if the children were Bengie, Jose, and Yadier, then the password would be:</p>
+
+						<p>BJY</p>
+
+						<input type="password" id="password" size=10>
+
+						<br>
+
+						<button id="evaluate_password" onclick="authenticate()">go</button>
+					</div>
+					{{/authenticated}}
+
+					{{#authenticated}}
+					<div id = "owner_id_div">
+						<p>choose an owner:</p>
+						<select id="owner_id" name="owner_id" size=10>
+							{{#owners}}
+								<option value="{{owner_id}}">{{nickname}}</option>
+							{{/owners}}
+						</select>
+
+						<br>
+
+						<button id="select_owner" onclick="select_owner()">go</button>
+					</div>
+
+					<div id = "player_to_drop_div" style = "display: none">
+
+						<p>player to drop:</p>
+
+						<div id = "player_to_drop"></div>
+
+						<button id="choose_player_to_drop" onclick="evaluate_dropped_player()">go</button>
+					</div>
+
+					<div id = "player_to_add_div" style = "display: none">
+
+						<p>player to add:</p>
+
+						<select id='player_to_add' size=10></select>
+
+						<button id="choose_player_to_add" onclick="evaluate_added_player()">go</button>
+					</div>
+					{{/authenticated}}
+				</div>
+
+				<div class="col-sm">
+
+					<button id = "restart" onclick="start_over()">start over</button>
+					{{#authenticated}}
+					<br>
+					<button id = "clear_session" onclick="clear_session()">clear session</button>
+					{{/authenticated}}
+				</div>
+
+			</div>
+		</div>
+
+		<p>page generated: {{page_generated}}</p>
+	</main>
+
+	<!-- SCRIPTS -->
+	<!-- JQuery -->
+
+<!-- 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+ -->
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+
+	<!-- Google Analytics -->
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-26481206-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+
+	<script>
+		$(document).ready( function () {
+			$('#players_table').DataTable();
+		});
+	</script>
 
 	</body>
 </html>

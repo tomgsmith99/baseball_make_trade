@@ -31,7 +31,11 @@ app.listen(port, () => {
 	console.log(`app listening at http://localhost:${port}`)
 })
 
-const season = 2021
+const todaysDate = new Date()
+const season = todaysDate.getFullYear()
+
+const dayOfYear = date =>
+  Math.floor((date - new Date(date.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
 
 /*************************************************/
 
@@ -59,7 +63,9 @@ app.get('/', (req, res) => {
 		return
 	}
 
-	let query = `SELECT * FROM ownersXseasons_current_view ORDER BY lnf`
+	// let query = `SELECT * FROM ownersXseasons_current_view ORDER BY lnf`
+
+	let query = `SELECT owner_id, nickname, season FROM ownersXseasons_detail WHERE season = ${season} ORDER BY nickname ASC`
 
 	console.log(query)
 
@@ -227,5 +233,3 @@ app.post('/authenticate', (req, res) => {
 	}
 })
 
-const dayOfYear = date =>
-  Math.floor((date - new Date(date.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
