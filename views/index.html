@@ -57,7 +57,7 @@
 
 const max_salary = 13000
 
-const season = 2021
+const season = 2022
 
 function authenticate() {
 
@@ -108,6 +108,7 @@ function clear_session() {
 }
 
 function evaluate_added_player() {
+
 	const added_player_id = $("#player_to_add").val()
 
 	console.log(added_player_id)
@@ -196,7 +197,7 @@ function select_owner() {
 
 		sessionStorage.setItem("bank", data.bank)
 
-		html = `<p>owner: ${data.fnf}</p>`
+		html = `<p>owner: ${data.nickname}</p>`
 		html += `<p>bank: $${data.bank}</p>`
 		html += `<hr>`
 
@@ -228,7 +229,7 @@ function select_owner() {
 				for (player of data) {
 					console.log(player)
 
-					player_to_drop += `<input type="radio" name="player_to_drop" value="${player.player_id}"> ${player.pos} - ${player.lnf} - ${player.team} - $${player.salary}<br>`
+					player_to_drop += `<input type="radio" name="player_to_drop" value="${player.player_id}"> ${player.pos} - ${player.fnf} - ${player.team} - $${player.salary}<br>`
 				}
 
 				$("#player_to_drop").html(player_to_drop)
@@ -379,38 +380,7 @@ window.onload = function() {
 			</div>
 		</div>
 
-		<p>page generated: {{page_generated}}</p>
 	</main>
-
-	<!-- SCRIPTS -->
-	<!-- JQuery -->
-
-<!-- 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
- -->
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
-
-	<!-- Google Analytics -->
-	<script type="text/javascript">
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-26481206-1']);
-		_gaq.push(['_trackPageview']);
-
-		(function() {
-			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
-	</script>
-
-	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
-
-	<script>
-		$(document).ready( function () {
-			$('#players_table').DataTable();
-		});
-	</script>
 
 	</body>
 </html>

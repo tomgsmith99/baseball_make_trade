@@ -121,7 +121,7 @@ app.post('/trade', (req, res) => {
 	const dropped_player_id = req.body.dropped_player_id
 	const added_player_id = req.body.added_player_id
 
-	let query = `SELECT salary, points FROM players_current WHERE player_id = ${added_player_id}`
+	let query = `SELECT salary, points FROM player_x_season_detail WHERE player_id = ${added_player_id} AND season = ${season}`
 
 	console.log(query)
 
@@ -139,7 +139,7 @@ app.post('/trade', (req, res) => {
 
 		console.log(`added_player_salary: ${added_player_salary}`)
 
-		query = `SELECT salary FROM players_current WHERE player_id = ${dropped_player_id}`
+		query = `SELECT salary FROM player_x_season_detail WHERE player_id = ${dropped_player_id} AND season = ${season}`
 
 		connection.query(query, function (err, data) {
 			if (err) {
@@ -154,7 +154,7 @@ app.post('/trade', (req, res) => {
 
 			let d = dayOfYear(new Date())
 
-			query = `INSERT INTO ownersXrosters_current SET owner_id = ${owner_id}, player_id = ${added_player_id}, start_date = ${d}, acquired = 1, prev_points = ${added_player_points}, season=${season}`
+			query = `INSERT INTO ownersXrosters SET owner_id = ${owner_id}, player_id = ${added_player_id}, start_date = ${d}, bench_date = 0, prev_points = ${added_player_points}, season=${season}`
 
 			console.log(query)
 
@@ -165,7 +165,7 @@ app.post('/trade', (req, res) => {
 					return
 				}
 
-				query = `UPDATE ownersXrosters_current SET bench_date = ${d}, benched = 1 WHERE owner_id = ${owner_id} AND player_id = ${dropped_player_id}`
+				query = `UPDATE ownersXrosters SET bench_date = ${d} WHERE owner_id = ${owner_id} AND player_id = ${dropped_player_id} AND season = ${season}`
 
 				console.log(query)
 
@@ -183,7 +183,7 @@ app.post('/trade', (req, res) => {
 						diff = added_player_salary - dropped_player_salary
 					}
 
-					query = `UPDATE ownersXseasons_current SET bank = (bank - ${diff}) WHERE owner_id = ${owner_id}`
+					query = `UPDATE ownersXseasons SET bank = (bank - ${diff}) WHERE owner_id = ${owner_id} AND season = ${season}`
 
 					console.log(query)
 
