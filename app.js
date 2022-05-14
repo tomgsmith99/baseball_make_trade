@@ -47,7 +47,8 @@ app.get('/favicon.ico', (req, res) => {
 app.get('/', (req, res) => {
 
 	var obj = {
-		api_base: process.env.API_BASE
+		api_base: process.env.API_BASE,
+		home_base: process.env.API_BASE
 	}
 
 	// check for valid session
@@ -62,8 +63,6 @@ app.get('/', (req, res) => {
 		res.render ('index', obj)
 		return
 	}
-
-	// let query = `SELECT * FROM ownersXseasons_current_view ORDER BY lnf`
 
 	let query = `SELECT owner_id, nickname, season FROM ownersXseasons_detail WHERE season = ${season} ORDER BY nickname ASC`
 
