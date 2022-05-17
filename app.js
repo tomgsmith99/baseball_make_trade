@@ -120,7 +120,9 @@ app.post('/trade', (req, res) => {
 	const dropped_player_id = req.body.dropped_player_id
 	const added_player_id = req.body.added_player_id
 
-	let query = `SELECT salary, points FROM player_x_season_detail WHERE player_id = ${added_player_id} AND season = ${season}`
+	let query = `SELECT salary, points FROM player_x_season WHERE player_id = ${added_player_id} AND season = ${season}`
+
+	// $query = "SELECT p.player_id, p.espn_stats_id, p.fnf, pxs.pos, pxs.salary FROM playersXseasons AS pxs, players AS p WHERE p.player_id = pxs.player_id AND p.player_id NOT IN (5248, 5433) AND updated < $today AND checked < 2 AND pxs.season = $season ORDER BY checked ASC LIMIT $batch_size";
 
 	console.log(query)
 
@@ -138,7 +140,7 @@ app.post('/trade', (req, res) => {
 
 		console.log(`added_player_salary: ${added_player_salary}`)
 
-		query = `SELECT salary FROM player_x_season_detail WHERE player_id = ${dropped_player_id} AND season = ${season}`
+		query = `SELECT salary FROM player_x_season WHERE player_id = ${dropped_player_id} AND season = ${season}`
 
 		connection.query(query, function (err, data) {
 			if (err) {
