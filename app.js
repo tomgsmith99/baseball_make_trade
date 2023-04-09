@@ -64,7 +64,7 @@ app.get('/', (req, res) => {
 		return
 	}
 
-	let query = `SELECT owner_id, nickname, season FROM ownersXseasons_detail WHERE season = ${season} ORDER BY nickname ASC`
+	let query = `SELECT owner_id, nickname, season FROM owner_x_season_detail WHERE season = ${season} ORDER BY nickname ASC`
 
 	console.log(query)
 
@@ -82,9 +82,9 @@ app.get('/', (req, res) => {
 
 		res.render ('index', obj)
 
-		connection.end(function(err) {
-			console.log("terminated mysql connection.")
-		})
+		// connection.end(function(err) {
+		// 	console.log("terminated mysql connection.")
+		// })
 	})
 })
 
@@ -122,8 +122,6 @@ app.post('/trade', (req, res) => {
 
 	let query = `SELECT salary, points FROM player_x_season WHERE player_id = ${added_player_id} AND season = ${season}`
 
-	// $query = "SELECT p.player_id, p.espn_stats_id, p.fnf, pxs.pos, pxs.salary FROM playersXseasons AS pxs, players AS p WHERE p.player_id = pxs.player_id AND p.player_id NOT IN (5248, 5433) AND updated < $today AND checked < 2 AND pxs.season = $season ORDER BY checked ASC LIMIT $batch_size";
-
 	console.log(query)
 
 	var connection = dbconn.mysql_conn()
@@ -155,7 +153,7 @@ app.post('/trade', (req, res) => {
 
 			let d = dayOfYear(new Date())
 
-			query = `INSERT INTO ownersXrosters SET owner_id = ${owner_id}, player_id = ${added_player_id}, start_date = ${d}, bench_date = 0, prev_points = ${added_player_points}, season=${season}`
+			query = `INSERT INTO owner_x_player SET owner_id = ${owner_id}, player_id = ${added_player_id}, start_date = ${d}, bench_date = 0, prev_points = ${added_player_points}, season=${season}`
 
 			console.log(query)
 
@@ -166,7 +164,7 @@ app.post('/trade', (req, res) => {
 					return
 				}
 
-				query = `UPDATE ownersXrosters SET bench_date = ${d} WHERE owner_id = ${owner_id} AND player_id = ${dropped_player_id} AND season = ${season}`
+				query = `UPDATE owner_x_player SET bench_date = ${d} WHERE owner_id = ${owner_id} AND player_id = ${dropped_player_id} AND season = ${season}`
 
 				console.log(query)
 
@@ -184,7 +182,7 @@ app.post('/trade', (req, res) => {
 						diff = added_player_salary - dropped_player_salary
 					}
 
-					query = `UPDATE ownersXseasons SET bank = (bank - ${diff}) WHERE owner_id = ${owner_id} AND season = ${season}`
+					query = `UPDATE owner_x_season SET bank = (bank - ${diff}) WHERE owner_id = ${owner_id} AND season = ${season}`
 
 					console.log(query)
 
