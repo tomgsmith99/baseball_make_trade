@@ -2,6 +2,7 @@
 const express = require('express')
 var session = require('express-session')
 let mustacheExpress = require('mustache-express')
+var cors = require('cors')
 
 /*************************************************/
 
@@ -12,6 +13,10 @@ var dbconn = require('./dbconn.js')
 const app = express()
 
 app.use(express.json())
+
+app.use(express.static('public'))
+
+app.use(cors())
 
 app.engine('html', mustacheExpress())
 
